@@ -150,7 +150,6 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    [super dealloc];
 }
 
 
@@ -203,6 +202,7 @@
         }
 
         [self.captureSession stopRunning];
+        
         [captureSession release];
     }
 

@@ -122,10 +122,6 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;}
 
     [videoDataOutput release];
 
-    if (videoDataOutputQueue) {
-        dispatch_release(videoDataOutputQueue);
-    }
-
     if (self.recordVideo == YES) {
         if (self.recordAssetWriter) {
             if (self.recordAssetWriter.status == AVAssetWriterStatusWriting) {
@@ -142,8 +138,10 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;}
         [recordPixelBufferAdaptor release];
     }
 
-    [self.customPreviewLayer removeFromSuperlayer];
-    self.customPreviewLayer = nil;
+    if (self.customPreviewLayer) {
+        [self.customPreviewLayer removeFromSuperlayer];
+        self.customPreviewLayer = nil;    
+    }
 }
 
 // TODO fix
