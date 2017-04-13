@@ -193,18 +193,22 @@
 
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    for (AVCaptureInput *input in self.captureSession.inputs) {
-        [self.captureSession removeInput:input];
+    if (self.captureSession) {
+        for (AVCaptureInput *input in self.captureSession.inputs) {
+            [self.captureSession removeInput:input];
+        }
+
+        for (AVCaptureOutput *output in self.captureSession.outputs) {
+            [self.captureSession removeOutput:output];
+        }
+
+        [self.captureSession stopRunning];
+        [captureSession release];
     }
 
-    for (AVCaptureOutput *output in self.captureSession.outputs) {
-        [self.captureSession removeOutput:output];
-    }
+    [captureVideoPreviewLayer release];
+    [videoCaptureConnection release];
 
-    [self.captureSession stopRunning];
-    self.captureSession = nil;
-    self.captureVideoPreviewLayer = nil;
-    self.videoCaptureConnection = nil;
     captureSessionLoaded = NO;
 }
 

@@ -120,23 +120,26 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;}
 {
     [super stop];
 
-    self.videoDataOutput = nil;
+    [videoDataOutput release];
+
     if (videoDataOutputQueue) {
         dispatch_release(videoDataOutputQueue);
     }
 
     if (self.recordVideo == YES) {
+        if (self.recordAssetWriter) {
+            if (self.recordAssetWriter.status == AVAssetWriterStatusWriting) {
+                [self.recordAssetWriter finishWriting];
+                NSLog(@"[Camera] recording stopped");
+            } else {
+                NSLog(@"[Camera] Recording Error: asset writer status is not writing");
+            }
 
-        if (self.recordAssetWriter.status == AVAssetWriterStatusWriting) {
-            [self.recordAssetWriter finishWriting];
-            NSLog(@"[Camera] recording stopped");
-        } else {
-            NSLog(@"[Camera] Recording Error: asset writer status is not writing");
+            [recordAssetWriter release];
         }
 
-        self.recordAssetWriter = nil;
-        self.recordAssetWriterInput = nil;
-        self.recordPixelBufferAdaptor = nil;
+        [recordAssetWriterInput release];
+        [recordPixelBufferAdaptor release];
     }
 
     [self.customPreviewLayer removeFromSuperlayer];
